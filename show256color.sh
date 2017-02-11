@@ -114,7 +114,7 @@ showColor()
 
 HELP="
 The script show 256color in terminal\n
-Help you config terminal program colorscheme, like vim,tmux,bash,zsh,etc.\n
+Helpful for configuring terminal program colorscheme, like vim,tmux,bash,zsh,etc.\n
 Note that if color 0~15 was changed in terminal by configuration file or\n
 CLI option, the corresponding hex & RGB value will be shown falsely.\n
 GitHub: philosophos\n
