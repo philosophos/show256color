@@ -2,9 +2,9 @@
 
 # File Name: show256color.sh
 # Author: philosophos<philosoph@yeah.net>
-# GitHub: philosophos
+# GitHub: https://github.com/philosophos/show256color
 # Create Time: 2017 Feb 08
-# Last modified: 2017 Feb 12
+# Last modified: 2017 Feb 19
 # show 256color in terminal
 ################################################################################
 
@@ -35,24 +35,10 @@ showColor()
         printf '  %3d #%02x%02x%02x ' $i $R $G $B
     fi
     if [ $RGB == 1 ];then
-        if [ $i == 0 ]||[ $i == 8 ]||[ $i == 232 ]||[ $i == 244 ]\
-            ||([ $i -ge 16 ]&&[ $((R%102)) == 0 ]&&[ $B == 0 ])
-        then
-            #tput cud1;tput sgr0
-            echo -e "\033[0m"
+            echo -en "\e[0m\v\e[14D"
             setColor $BF $i
-            #printf " R%03dG%03dB%03d " $R $G $B ;tput cuu1
-            printf " R%03dG%03dB%03d \033[1A" $R $G $B
-        else
-            tput sc
-            #tput cud1 ;for c in 1..14;do tput cub1;done
-            #printf " R%03dG%03dB%03d " $R $G $B
-            printf "\033[1B\033[14D R%03dG%03dB%03d " $R $G $B
-            tput rc
-        fi
+            printf " R%03dG%03dB%03d \e[A\e[0m" $R $G $B
     fi
-    #sleep .9
-    tput sgr0
 }
 
 256color()
@@ -96,10 +82,10 @@ showColor()
     #            color $1 $i $R $G $B;B=$((B+step))
     #        done
     #        B=0; G=$((G+step))
-    #        [[ $((blk%2)) == 0 ]] && echo -e "\n" || echo -ne "\033[2B\033[84D"
+    #        [[ $((blk%2)) == 0 ]] && echo -e "\n" || echo -ne "\e[2B\e[84D"
     #    done
     #    G=0; R=$((R+step))
-    #    [[ $((blk%2)) == 0 ]] && echo -ne "\033[12A\033[84C" || echo -e "\033[1A"
+    #    [[ $((blk%2)) == 0 ]] && echo -ne "\e[12A\e[84C" || echo -e "\e[A"
     #done
     #color 232~255
     R=8;G=8;B=8;step=10
@@ -177,57 +163,4 @@ fi
 #    $d=15+r*36+g*6+b
 #232~255
 #    24 grey levels,from black to white
-#
-#from man terminfo
-#section Color Handling
-#
-#While the curses library works with color pairs (reflecting the inabil‐
-#ity of some devices to set foreground and  background  colors  indepen‐
-#dently), there are separate capabilities for setting these features:
-#
-#·   To  change  the  current  foreground  or background color on a Tek‐
-#    tronix-type terminal, use setaf (set  ANSI  foreground)  and  setab
-#    (set  ANSI background) or setf (set foreground) and setb (set back‐
-#    ground).  These take one parameter, the  color  number.   The  SVr4
-#    documentation  describes only setaf/setab; the XPG4 draft says that
-#    "If the terminal supports ANSI escape sequences to  set  background
-#    and  foreground,  they  should be coded as setaf and setab, respec‐
-#    tively.
-#
-#·   If the terminal supports other escape sequences to  set  background
-#    and  foreground,  they  should  be  coded as setf and setb, respec‐
-#    tively.  The vidputs and the refresh functions use  the  setaf  and
-#    setab capabilities if they are defined.
-#
-#The  setaf/setab and setf/setb capabilities take a single numeric argu‐
-#ment each.  Argument values 0-7 of setaf/setab are portably defined  as
-#follows  (the  middle  column  is the symbolic #define available in the
-#header for the curses or ncurses libraries).  The terminal hardware  is
-#free to map these as it likes, but the RGB values indicate normal loca‐
-#tions in color space.
-#
-#             Color       #define       Value       RGB
-#             black     COLOR_BLACK       0     0, 0, 0
-#             red       COLOR_RED         1     max,0,0
-#             green     COLOR_GREEN       2     0,max,0
-#             yellow    COLOR_YELLOW      3     max,max,0
-#             blue      COLOR_BLUE        4     0,0,max
-#             magenta   COLOR_MAGENTA     5     max,0,max
-#             cyan      COLOR_CYAN        6     0,max,max
-#             white     COLOR_WHITE       7     max,max,max
-#The argument values of setf/setb historically correspond to a different
-#mapping, i.e.,
-#
-#             Color       #define       Value       RGB
-#             black     COLOR_BLACK       0     0, 0, 0
-#             blue      COLOR_BLUE        1     0,0,max
-#             green     COLOR_GREEN       2     0,max,0
-#             cyan      COLOR_CYAN        3     0,max,max
-#             red       COLOR_RED         4     max,0,0
-#             magenta   COLOR_MAGENTA     5     max,0,max
-#             yellow    COLOR_YELLOW      6     max,max,0
-#             white     COLOR_WHITE       7     max,max,max
-#
-#It is important to not confuse the two sets of color capabilities; oth‐
-#erwise red/blue will be interchanged on the display.
 #
