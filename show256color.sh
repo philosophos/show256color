@@ -116,7 +116,7 @@ options:\n
 "
 
 [[ $(tput colors)==256 ]]||\
-    echo "\033[33m The terminal does NOT support 256color :("
+    echo "\e[33m The terminal does NOT support 256color :("
 BF='b';HEX=0;RGB=0
 if [ $# -gt 0 ];then
     ARGS=`getopt -o "bfhHR" -l "background,foreground,bg,fg,hex,rgb,help"\
@@ -130,7 +130,7 @@ if [ $# -gt 0 ];then
             r|-r|rgb|--rgb)RGB=1;shift;;
             h|-h|help|--help)echo -e $HELP;shift;exit;;
             --)shift;;
-            *)echo -e "\033[33m Parameter ERROR!\033[0m For more details see
+            *)echo -e "\e[33m Parameter ERROR!\e[0m For more details see
                 help.";exit 1;;
         esac
     done
