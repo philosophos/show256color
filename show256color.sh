@@ -4,7 +4,7 @@
 # Author: philosophos<philosoph@yeah.net>
 # GitHub: https://github.com/philosophos/show256color
 # Create Time: 2017 Feb 08
-# Last modified: 2017 Feb 19
+# Last modified: 2017 Feb 20
 # show 256color in terminal
 ################################################################################
 
@@ -35,10 +35,11 @@ showColor()
         printf '  %3d #%02x%02x%02x ' $i $R $G $B
     fi
     if [ $RGB == 1 ];then
-            echo -en "\e[0m\v\e[14D"
+            printf "\e[0m\v\e[14D"
             setColor $BF $i
-            printf " R%03dG%03dB%03d \e[A\e[0m" $R $G $B
+            printf " R%03dG%03dB%03d \e[A" $R $G $B
     fi
+    tput sgr0
 }
 
 256color()
@@ -75,18 +76,6 @@ showColor()
         done
         G=0; R=$((R+step*2))
     done
-    ## this following also work,but use some console escape and control sequences
-    #for blk in {0..5};do
-    #    for ((line=blk*6;line<blk*6+6;line++));do
-    #        for ((i=line*6+16;i<line*6+22;i++));do
-    #            color $1 $i $R $G $B;B=$((B+step))
-    #        done
-    #        B=0; G=$((G+step))
-    #        [[ $((blk%2)) == 0 ]] && echo -e "\n" || echo -ne "\e[2B\e[84D"
-    #    done
-    #    G=0; R=$((R+step))
-    #    [[ $((blk%2)) == 0 ]] && echo -ne "\e[12A\e[84C" || echo -e "\e[A"
-    #done
     #color 232~255
     R=8;G=8;B=8;step=10
     for i in {232..255};do
@@ -103,7 +92,8 @@ The script show 256color in terminal\n
 Helpful for configuring terminal program colorscheme, like vim,tmux,bash,zsh,etc.\n
 Note that if color 0~15 was changed in terminal by configuration file or\n
 CLI option, the corresponding hex & RGB value will be shown falsely.\n
-GitHub: philosophos\n
+Author: philosophos<philosoph@yeah.net> \n
+GitHub: https://github.com/philosophos/show256color \n
 Usage:\n
 \t./show256color [option]\n
 without option,show 256color in background.\n
@@ -116,10 +106,10 @@ options:\n
 "
 
 [[ $(tput colors)==256 ]]||\
-    echo "\e[33m The terminal does NOT support 256color :("
+    echo -e "\e[33m The terminal does NOT support 256color :("
 BF='b';HEX=0;RGB=0
 if [ $# -gt 0 ];then
-    ARGS=`getopt -o "bfhHR" -l "background,foreground,bg,fg,hex,rgb,help"\
+    ARGS=`getopt -o "bfxrh" -l "background,foreground,bg,fg,hex,rgb,help"\
     -n "show256color.sh" -- "$@"`
     eval set -- "${ARGS}"
     for opt in "$@"; do

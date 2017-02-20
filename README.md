@@ -1,4 +1,4 @@
-######The script show 256color in terminal    
+##### The script show 256color in terminal    
 Helpful for configuring terminal program colorscheme, like vim,tmux,bash,zsh,etc.    
 Note that if color 0~15 was changed in terminal by configuration file or    
 CLI option, the corresponding hex & RGB value will be shown falsely.    
