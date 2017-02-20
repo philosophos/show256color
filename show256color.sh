@@ -45,7 +45,7 @@ showColor()
             printf " R%03dG%03dB%03d \e[A" $R $G $B
         else
             #tput sc
-            #tput cud1 ;tput cub 14
+            #tput cud 1;tput cub 14
             #printf " R%03dG%03dB%03d " $R $G $B
             #tput rc
             printf "\e[s\e[B\e[14D R%03dG%03dB%03d \e[u" $R $G $B
@@ -58,7 +58,7 @@ showColor()
 
 256color()
 {
-    #color 0~15
+    # color 0~15
     #array_r=(00 80 00 80 00 80 00 c0 80 ff 00 ff 00 ff 00 ff)
     #array_g=(00 00 80 80 00 00 80 c0 80 00 ff ff 00 00 ff ff)
     #array_b=(00 00 00 00 80 80 80 c0 80 00 00 00 ff ff ff ff)
@@ -71,10 +71,10 @@ showColor()
         B=${array_b[i]}
         showColor $BF $i $HEX $RGB
         if [ $(((i+1)%8)) -eq 0 ];then
-            [[ $RGB -eq 0 ]]&& echo '' || echo -e '\n'
+            [[ $RGB == 0 ]]&& echo '' || echo -e '\n'
         fi
     done
-    #color 16~231
+    # color 16~231
     R=0;G=0;B=0;step=51
     for blk in {0..2};do
         for ((line=blk*12;line<blk*12+6;line++));do
@@ -90,24 +90,42 @@ showColor()
         done
         G=0; R=$((R+step*2))
     done
-    ## this following also work,but use some console escape and control sequences
+    # this following also work,but not good
     #for blk in {0..5};do
     #    for ((line=blk*6;line<blk*6+6;line++));do
     #        for ((i=line*6+16;i<line*6+22;i++));do
-    #            color $1 $i $R $G $B;B=$((B+step))
+    #            showColor $BF $i $HEX $RGB;B=$((B+step))
     #        done
     #        B=0; G=$((G+step))
-    #        [[ $((blk%2)) == 0 ]] && echo -e "\n" || echo -ne "\e[2B\e[84D"
+    #        if [ $((blk%2)) -eq 0 ];then
+    #            [[ $RGB == 1 ]] &&printf "\n\n" ||printf "\n"
+    #        else
+    #            if [ $RGB == 1 ];then
+    #                printf "\e[2B\e[84D"
+    #            elif [ $HEX == 1 ];then
+    #                printf "\e[B\e[78D"
+    #            else
+    #                printf "\e[B\e[30D"
+    #            fi
+    #        fi
     #    done
     #    G=0; R=$((R+step))
-    #    [[ $((blk%2)) == 0 ]] && echo -ne "\e[12A\e[84C" || echo -e "\e[A"
+    #    if [ $((blk%2)) -eq 1 ];then
+    #        printf "\e[E"
+    #    elif [ $RGB == 1 ];then
+    #        printf "\e[12A\e[84C"
+    #    elif [ $HEX == 1 ];then
+    #        printf "\e[6A\e[78C"
+    #    else
+    #        printf "\e[6A\e[30C"
+    #    fi
     #done
-    #color 232~255
+    # color 232~255
     R=8;G=8;B=8;step=10
     for i in {232..255};do
         showColor $BF $i $HEX $RGB
         if [ $(((i-15)%12)) -eq 0 ];then
-            [[ $RGB -eq 0 ]]&& echo '' || echo -e '\n'
+            [[ $RGB == 0 ]]&& echo '' || echo -e '\n'
         fi
         R=$((R+step));G=$((G+step));B=$((B+step))
     done
@@ -118,7 +136,8 @@ The script show 256color in terminal\n
 Helpful for configuring terminal program colorscheme, like vim,tmux,bash,zsh,etc.\n
 Note that if color 0~15 was changed in terminal by configuration file or\n
 CLI option, the corresponding hex & RGB value will be shown falsely.\n
-GitHub: philosophos\n
+Author: philosophos<philosoph@yeah.net> \n
+GitHub: https://github.com/philosophos/show256color \n
 Usage:\n
 \t./show256color [option]\n
 without option,show 256color in background.\n
@@ -134,7 +153,7 @@ options:\n
     echo "\e[33m The terminal does NOT support 256color :("
 BF='b';HEX=0;RGB=0
 if [ $# -gt 0 ];then
-    ARGS=`getopt -o "bfhHR" -l "background,foreground,bg,fg,hex,rgb,help"\
+    ARGS=`getopt -o "bfxrh" -l "background,foreground,bg,fg,hex,rgb,help"\
     -n "show256color.sh" -- "$@"`
     eval set -- "${ARGS}"
     for opt in "$@"; do
