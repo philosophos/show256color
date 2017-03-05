@@ -12,4 +12,5 @@ CLI option, the corresponding hex & RGB value will be shown falsely.
          	[x|-x|hex|--hex]		also show color value in hexadecimal    
          	[r|-r|rgb|--rgb]		also show color value in RGB    
          	[h|-h|help|--help]		show the help    
-    
+
+[Screenshots](screenshots.md)
